@@ -1,6 +1,6 @@
 #include<stm32f10x.h>
 
-//us延时
+//1us延时
 void Delay_us(u32 i)
 {
   u32 temp;
@@ -15,9 +15,8 @@ void Delay_us(u32 i)
   SysTick->CTRL = 0; //关闭计数器
   SysTick->VAL = 0; //清除计数
 }
-
-
-void Delay_us(u32 i)
+//1ms延时
+void Delay_ms(u32 i)
 {
   u32 temp;
 	SysTick->LOAD = 72000*i; //72M,一秒计72M次，一毫秒计72000次，一微秒计72次。装入计次的数  
@@ -31,8 +30,8 @@ void Delay_us(u32 i)
   SysTick->CTRL = 0; //关闭计数器
   SysTick->VAL = 0; //清除计数
 }
-
-void Delay_us(u32 i)
+//1s延时
+void Delay_s(u32 i)
 {
   u32 temp;
 	SysTick->LOAD = 72000000*i; //72M,一秒计72M次，一毫秒计72000次，一微秒计72次。装入计次的数  
