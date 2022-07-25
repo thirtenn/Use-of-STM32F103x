@@ -1,0 +1,78 @@
+#include<stdio.h>
+/**********************************************************
+函数名：Key_Init
+函数功能：初始化GPIOB某个引脚上的按键3 | 4 | 5
+输入：无
+输出：无
+**********************************************************/
+void Key_Init()
+{
+	RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOB,ENABLE);//打开使能时钟
+	GPIO_InitTypeDef GPIO_InitStructure;
+	//定义结构体
+	GPIO_InitStructure.Mode=GPIO_Mode_IPU;//设置为上拉输入（该引脚默认值为1）
+	GPIO_InitStructure.Pin=
+		GPIO_Pin_3 | GPIO_Pin_4 | GPIO_Pin_5;//设置使用的引脚
+	GPIO_InitStructure.Speed=GPIO_Speed_50MHz;//设置传输速度为50MHz
+
+	GPIO_Init(GPIOB, &GPIO_InitStructure);
+}
+
+/***********************************************************
+函数名：Beep_Init
+函数功能：初始化有源蜂鸣器
+输入：无
+输出：无
+************************************************************/
+void Beep_Init()
+{
+	RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOA,ENABLE);
+	GPIO_InitTypeDef GPIO_InitStructure;
+	//设置GPIOA的结构体
+	GPIO_InitStructure.Pin=GPIO_Pin_1;
+	GPIO_InitStructure.Mode=GPIO_Mode_Out_PP;//使用推挽输出模式
+	GPIO_InitStructure.Speed=GPIO_Speed_50MHz;
+	
+	GPIO_Init(GPIOA,&GPIO_InitStructure);
+}
+/************************************************************
+函数名：Delay_ms
+函数功能：延时毫秒
+输入：ims
+输出：无
+************************************************************/
+void Delay_ms(u32 i)
+{
+	SysTick->LOAD = i*72000;//内核时钟72M
+	SysTick->VAL = 0;//清空计数器,装入LOAD的值
+	SysTick->CTRL = 0x05;//打开计数器(减法)
+	u32 temp;
+	do{temp = SysTick->CTRL}
+		while((!(temp&(1<<16)))|| (!(temp&0x01)));
+	SysTick->CTRL=0;
+	SysTick->VAL = 0;
+}
+
+/**************************************************************
+*函数名：Sound
+*函数功能：按下按键使蜂鸣器发出声响
+输入：无
+输出：无
+***************************************************************/
+void Sound()
+{
+	Key_Init();
+	Beep_Init();
+	while(1)
+	{
+		if(GPIO_ReadInputDataBit(GPIOB,GPIO_Pin_3)==0)
+			{
+				Delay_ms(10);
+        while(GPIO_ReadInputDataBit(GPIOB,GPIO_Pin_3)==0)//按键消抖处理
+				GPIO_ResetBit(GPIOA,GPIO_Pin1);
+				Delay(500);
+				GPIO_SetBit(GPIOA,GPIO_Pin_1);
+				Delay(200);
+			}
+	}
+}
