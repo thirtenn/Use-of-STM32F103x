@@ -1,0 +1,37 @@
+/********************************************************** 
+GPIO_ReadInputDataBit(GPIO_TypeDef* GPIOx, GPIO_Pin);
+*简介：读取GPIOx某个引脚的输入值
+*参数：GPIOx    GPIO_Pin
+**********************************************************/
+//读取GPIOA引脚7的输入值
+GPIO_ReadInputDataBit(GPIOA, GPIO_Pin_7);
+
+
+
+/*************************************************************
+GPIO_ReadInputData(GPIO_TypeDef* GPIOx);
+*简介：读取GPIOx全部引脚的输入值。
+*参数：GPIOx
+**************************************************************/
+//读取GPIOA全部引脚的输入值
+value = GPIO_ReadInputDataBit(GPIOA);
+
+
+
+/************************************************************
+GPIO_ReadOutputDataBit(GPIO_TypeDef* GPIOx, GPIO_Pin_);
+*简介：读取GPIOx某个引脚的输出值
+*参数：GPIOx  GPIO_Pin
+*************************************************************/
+//读取GPIOA的引脚2的输出值
+GPIO_ReadOutputDataBit(GPIOA, GPIO_Pin_2);
+
+
+
+/*************************************************************
+GPIO_ReadOutputData(GPIO_TypeDef* GPIOx, GPIO_Pin_);
+*简介：读取GPIOx的输出值
+*参数：GPIOx
+****************************************************************/
+//读取GPIOA的输出值
+GPIO_ReadOutputData(GPIOA);
