@@ -1,0 +1,41 @@
+#include<stm32f10x.h>
+
+//1us延时
+void Delay_us(u32 i)
+{
+  u32 temp;
+	SysTick->LOAD = 72*i; //72M,一秒计72M次，一毫秒计72000次，一微秒计72次。装入计次的数  
+  	SysTick->VAL = 0; //清除计数器，装入LOAD值,
+	SysTick->CTRL = 0x05; //配置状态，内核时钟，开启使能计数
+
+  do{ temp = SysTick->CTRL} //读取CTRL的值
+    while((!(temp&(1<<16)))&&(temp&0x01))
+//判断CTRL的位16是否置为1（计数达到）及时钟是否打开（后面的"与"个人觉得有误，应改成"或"后面取非）
+//将1左移16位，若CTRL的位16为1，则为真，否则为假
+  SysTick->CTRL = 0; //关闭计数器
+  SysTick->VAL = 0; //清除计数
+}
+//1ms延时
+void Delay_ms(u32 i)
+{
+  u32 temp;
+	SysTick->LOAD = 72000*i; //72M,一秒计72M次，一毫秒计72000次，一微秒计72次。装入计次的数  
+  SysTick->VAL = 0; //清除计数器，装入LOAD值,
+	SysTick->CTRL = 0x05; //配置状态，内核时钟，开启使能计数
+
+  do{ temp = SysTick->CTRL} //读取CTRL的值
+    while((!(temp&(1<<16)))&&(temp&0x01))
+//判断CTRL的位16是否置为1（计数达到）及时钟是否打开
+//将1左移16位，若CTRL的位16为1，则为真，否则为假
+  SysTick->CTRL = 0; //关闭计数器
+  SysTick->VAL = 0; //清除计数
+}
+//1s延时
+//如果继续像上面一样配置LOAD值来完成1s延时，会由于寄存器位置不够大导致数值溢出，这里调用ms延时达到s延时的目的
+void Delay_s(u32 i)
+{
+	while(i--)
+	{
+		Delay_ms(1000);
+	}
+}
