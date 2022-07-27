@@ -1,2 +1,2 @@
-https://github.com/thirtenn/Use-of-STM32F103x/blob/main/dc7a80da866c6308e1786a9695e7eaa.jpg
+![EXTI内部原理图](https://github.com/thirtenn/Use-of-STM32F103x/blob/main/dc7a80da866c6308e1786a9695e7eaa.jpg)
 中断系统由NVIC中断控制系统进行控制，如果要使用GPIO进行外部中断，需要将GPIO引脚映射到EXTI，通过EXTI进入NVIC中断控制，如上图所示
