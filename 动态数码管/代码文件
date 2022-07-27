@@ -1,0 +1,58 @@
+/************************************************************
+*函数名：LED_Init
+*函数功能：初始化LED数码管(此数码管为共阳极数码管)
+*输入：无
+*输出：无
+*************************************************************/
+#include <stm32f10x.h>
+#include <Delay.h>
+void LED_Init()
+{
+	//打开GPIOE和GPIOG的使能通道
+	RCC_APB2periphClockCmd(RCC_APB2periph_GPIOE | RCC_APB2periph_GPIOG, ENABLE);
+	//设置GPIOG为推挽输出，选中高八位引脚
+	GPOIO_InitTypeDef GPIO_InitStructure;
+	GPIO_InitStructure.Pin=GPIO_Pin_15 | GPIO_Pin_14 GPIO_Pin_13 | GPIO_Pin_12 | GPIO_Pin_11
+		| GPIO_Pin_10 | GPIO_Pin_9 | GPIO_Pin_8;
+	GPIO_InitStructure.Mode=GPIO_Mode_Out_PP;
+	GPIO_InitStructure.Speed=GPIO_Speed_10MHz;
+	GPIO_Init(GPIOE,&GPIO_InitStructure);
+//设置GPIOG为推挽输出模式，选中全部引脚
+	GPIO_InitStructure.Pin=GPIO_Pin_All;
+	GPIO_InitStructure.Mode=GPIO_Mode_Out_PP;
+	GPIO_InitStructure.Speed=GPIO_Speed_10MHz;
+	GPIO_Init(GPIOG,&GPIO_InitStructure);
+}
+/******************************************************************
+*函数名：main
+*函数功能：实现LED数码管显示
+输入：无
+输出：无
+******************************************************************/
+	u16 LED_num[6]={0x7FFF,0xBFFF,0xDFFF,0xEFFF,0xF7FF,0xFBFF};
+	u8 LED_number[10]={0xC0,0xF9,0xA4,0xB0,0x99,0x92,0x82,0xF8,0x80,0x90};
+void main()
+{
+	LED_Init();
+	while(1)
+{
+	GPIO_Write(GPIOE,LED_num[0]);
+	GPIO_Write(GPIOG,LED_number[1]);
+Delay_ms(20);
+	GPIO_Write(GPIOE,LED_num[1]);
+	GPIO_Write(GPIOG,LED_number[2]);
+Delay_ms(20);
+	GPIO_Write(GPIOE,LED_num[2]);
+	GPIO_Write(GPIOG,LED_number[3]);
+Delay_ms(20);
+	GPIO_Write(GPIOE,LED_num[3]);
+	GPIO_Write(GPIOG,LED_number[4]);
+Delay_ms(20);
+	GPIO_Write(GPIOE,LED_num[4]);
+	GPIO_Write(GPIOG,LED_number[5]);
+Delay_ms(20);
+	GPIO_Write(GPIOE,LED_num[5]);
+	GPIO_Write(GPIOG,LED_number[6]);
+}
+
+}
